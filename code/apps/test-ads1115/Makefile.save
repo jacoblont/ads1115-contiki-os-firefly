@@ -1,0 +1,14 @@
+DEFINES += PROJECT_CONF_H=\"project-conf.h\"
+
+CONTIKI_PROJECT = test-ads1115
+CONTIKI = ../../contiki
+C
+
+CONTIKI_TARGET_SOURCEFILES += ads1115.c
+
+#MODULES += /dev/bme280
+
+all: $(CONTIKI_PROJECT)
+
+CONTIKI_WITH_RIME = 1
+include $(CONTIKI)/Makefile.include
