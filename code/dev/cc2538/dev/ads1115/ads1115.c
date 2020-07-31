@@ -107,11 +107,11 @@ ads1115_write_reg(uint8_t i2cAddress, uint8_t* buf, uint8_t num)
     return ADS1115_SUCCESS;
   }
   // Should be the addresses:
-  printf("buf is: %d, ", buf);
-  printf("*buf+1 is: %d\n", (buf+1));
-  printf("*buf+2 is: %d\n", (buf+2));
+  printf("buf is: %p, ", buf);
+  printf("*buf+1 is: %p\n", (buf+1));
+  printf("*buf+2 is: %p\n", (buf+2));
   // Should be the bytes:
-  printf("*buf is: %d\n", *buf);
+  printf("*buf is: %u\n", *buf);
   printf("*buf++ is: %d\n", *(buf+1));
   printf("*buf++ is: %d\n", *(buf+2));
   printf("ADS1115: ads1115_write_reg returns ERROR\n");
@@ -124,7 +124,8 @@ ads1115_write_reg(uint8_t i2cAddress, uint8_t* buf, uint8_t num)
 static uint16_t readRegister(uint8_t reg) {
   uint8_t i2cresult[2]; // 2 byte result array
   ads1115_read_reg(reg, &i2cresult[0], (uint8_t)2, ADS1115_ADDRESS);
-  //printf("ADS1115: recasting readRegister output\n");
+   
+  //printf("readRegister gives:  %u \n",(i2cresult[0] << 8) | i2cresult[1]);
   return ((i2cresult[0] << 8) | i2cresult[1]);
 }
 
@@ -146,7 +147,8 @@ uint16_t readADC_SingleEnded(uint8_t channel) {
       ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
       ADS1015_REG_CONFIG_CMODE_TRAD |   // Traditional comparator (default val)
       ADS1015_REG_CONFIG_DR_1600SPS |   // 1600 samples per second (default)
-      ADS1015_REG_CONFIG_MODE_SINGLE;   // Single-shot mode (default)
+      //ADS1015_REG_CONFIG_MODE_SINGLE;   // Single-shot mode (default)
+      ADS1015_REG_CONFIG_MODE_CONTIN;   // Set to continuous conversion
 
   // Set PGA/voltage range
   config |= CHOSEN_GAIN;
@@ -190,7 +192,7 @@ uint16_t readADC_SingleEnded(uint8_t channel) {
   
   // Wait for the conversion to complete
   //printf("ADS1115: Starting the rtimer\n");
-  // Wait for the conversion to complete (this should do +-11 ms, I need +-9 ms, so its fine)
+  // Wait for the conversion to complete (this (/100) should do +-11 ms, I need +-9 ms, so its fine)
   rtimer_clock_t t0;
   t0 = RTIMER_NOW();
   while(RTIMER_CLOCK_LT(RTIMER_NOW(), t0 + RTIMER_SECOND / 100));
