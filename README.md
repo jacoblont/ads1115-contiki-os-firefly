@@ -9,6 +9,14 @@ Please use the following command, within the contiki folder to get the contiki f
 
 `git submodule update --init`
 
+### How to compile? ###
+First go to the application using `cd /code/apps/test-ads1115`
+
+Next, run `make test-ads1115.upload && make login` and you should soon see two sensor values appearing in your terminal when the compilation process is done.
+
+### Issues with the serialdump executable ###
+Solution: recompile serialdump within the contiki/tools/sky folder and rename the executable to serialdump-linux (first remove the old version).
+
 ### Disclaimer ###
 Please note that I made the code for my specific purpose. Everything works fine and everything is there to use an ADS1115 on the Firefly, but you may need to modify some things to make it work for your project.
 Please take a look at the datasheet of the ADC and make sure that you use the right (current sensing) resistors for your application to prevent blowing up your ADC. The resisitors on the I2C bus should not have to be changed.
