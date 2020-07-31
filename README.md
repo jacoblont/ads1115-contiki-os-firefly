@@ -5,9 +5,11 @@ I created a library to use the Adafruit ADS1115 16-bit ADC in combination with t
 There are some ADS1115 specific things in the code, but I am sure that also the 12-bit ADS1015 can be used without having to make too much modifications.
 
 ### Contiki is a submodule of the repository ###
-Please use the following command, within the contiki folder to get the contiki files after cloning the repository
+Please use the following command two times, within the contiki folder to get the contiki files after cloning the repository
 
 `git submodule update --init`
+
+The command `git submodule update --init --recursive` should also work.
 
 ### How to compile? ###
 First go to the application using `cd /code/apps/test-ads1115`
