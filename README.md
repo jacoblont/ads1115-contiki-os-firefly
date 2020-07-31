@@ -12,7 +12,7 @@ Please use the following command two times, within the contiki folder to get the
 The command `git submodule update --init --recursive` should also work.
 
 ### How to compile? ###
-First go to the application using `cd /code/apps/test-ads1115`
+First go to the application using `cd code/apps/test-ads1115`
 
 Next, run `make test-ads1115.upload && make login` and you should soon see two sensor values appearing in your terminal when the compilation process is done.
 
