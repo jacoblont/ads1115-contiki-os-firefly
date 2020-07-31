@@ -21,7 +21,7 @@ The ADS1115 and the Firefly communicate over I2C, so a I2C bus needs to be creat
 ![I2C connections between the ADC and the Firefly](/readme_image/i2c_connections.png "I2C connections image")
 
 Since the Firefly runs on 3.3V, I chose to make the I2C bus 3.3V, which is also why the ADS1115 is powered using 3.3V.
-Again, the current sensing resistors are chosen to meet the signals I use in my project. You may need to change these for your project to make sure you do not blow up the ADC and also to make sure that you can use the full 16 bit resolution (if you want, of course).
+Again, the current sensing resistors (R3 and R4 in the image) are chosen to meet the signals I use in my project. You may need to change these for your project to make sure you do not blow up the ADC and also to make sure that you can use the full 16 bit resolution (if you want, of course).
 
 ### Based on ###
 Some parts of the code are based on or inspired by the [Adafruit ADS1x15 library](https://github.com/adafruit/Adafruit_ADS1X15).
