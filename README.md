@@ -14,7 +14,7 @@ The command `git submodule update --init --recursive` should also work.
 ### How to compile? ###
 First go to the application using `cd code/apps/test-ads1115`
 
-Next, run `make test-ads1115.upload && make login` and you should soon see two sensor values appearing in your terminal when the compilation process is done.
+Next, run `make test-ads1115.upload && make login` and you should soon see two sensor values appearing in your terminal when the compilation process is done, assuming you already have the toolchain needed to compile Contiki-OS. For more information on getting started, please visit [Getting Started with Zolertia products](https://github.com/Zolertia/Resources/wiki/Getting-Started-with-Zolertia-products)
 
 ### Issues with the serialdump executable ###
 Solution: recompile serialdump within the contiki/tools/sky folder and rename the executable to serialdump-linux (first remove the old version).
