@@ -81,7 +81,7 @@ ads1115_read_reg(uint8_t reg, uint8_t* buf, uint8_t num, uint8_t i2cAddress)
     return ADS1115_ERROR;
   }
 
-  //i2c_master_enable(); // needed here? It is also never disabled? Shouldnt this enable be done in configure?
+  i2c_master_enable(); // Needed to make sure the i2c comm is performed
   if(i2c_single_send(i2cAddress, reg) == I2C_MASTER_ERR_NONE) {
     if(i2c_burst_receive(i2cAddress, buf, num) == I2C_MASTER_ERR_NONE) {
 //      printf("ADS1115: ads1115_read_reg SUCCES \n");
@@ -103,6 +103,7 @@ ads1115_write_reg(uint8_t i2cAddress, uint8_t* buf, uint8_t num)
     printf("ADS1115: invalid write reg values\n");
     return ADS1115_ERROR;
   }
+  i2c_master_enable(); // Needed to make sure the i2c comm is performed
   if(i2c_burst_send(i2cAddress, buf, num) == I2C_MASTER_ERR_NONE) {
     //printf("ADS1115: I2C burst send succeeded\n");
     return ADS1115_SUCCESS;
@@ -201,7 +202,7 @@ uint16_t readADC_SingleEnded(uint8_t channel) {
   // Add a timer to give the ADS some time to switch between channels:
   // Test and maybe decrease the time
   t0 = RTIMER_NOW();
-  while(RTIMER_CLOCK_LT(RTIMER_NOW(), t0 + RTIMER_SECOND / 10));
+  while(RTIMER_CLOCK_LT(RTIMER_NOW(), t0 + RTIMER_SECOND / 100));
 
   //printf("ADS1115: rtimer done\n");
 
@@ -248,7 +249,6 @@ configure(int type, int value_arg)
     if(value_arg){
       i2c_init(I2C_SDA_PORT, I2C_SDA_PIN, I2C_SCL_PORT, I2C_SCL_PIN, I2C_SCL_NORMAL_BUS_SPEED);
       enabled = 1;
-      //i2c_master_enable(); // Is already called in i2c_init // Moved here from read_register
       //printf("ADS1115: configure function succeeded\n");
       return ADS1115_SUCCESS;
     }
