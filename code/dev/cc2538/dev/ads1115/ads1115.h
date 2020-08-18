@@ -64,6 +64,7 @@
 #define ADS1115_ERROR             (-1)
 #define ADS1115_SUCCESS           0x00
 
+#define ADS1115_STOPBYTE          0x
 
 //  FROM THE ADAFRUIT GITHUB FILES FOR ARDUINO: Used to port to contiki
 /*=========================================================================

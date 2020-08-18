@@ -73,14 +73,15 @@ status(int type)
 }
 /*---------------------------------------------------------------------------*/
 static int //  Based on the SHT25 code
-ads1115_read_reg(uint8_t reg, uint8_t* buf, uint8_t num, uint8_t i2cAddress) //JL: register, buffer-pointer, num?? number of bytes? Yes.
+ads1115_read_reg(uint8_t reg, uint8_t* buf, uint8_t num, uint8_t i2cAddress) 
+//JL: register, buffer-pointer, number of bytes.
 {
   if((buf == NULL) || (num <= 0)) {
     printf("ADS1115: ads1115_read_reg buf-num ERROR \n");
     return ADS1115_ERROR;
   }
 
-  i2c_master_enable(); // needed here? It is also never disabled? Shouldnt this enable be done in configure?
+  //i2c_master_enable(); // needed here? It is also never disabled? Shouldnt this enable be done in configure?
   if(i2c_single_send(i2cAddress, reg) == I2C_MASTER_ERR_NONE) {
     if(i2c_burst_receive(i2cAddress, buf, num) == I2C_MASTER_ERR_NONE) {
 //      printf("ADS1115: ads1115_read_reg SUCCES \n");
@@ -147,8 +148,8 @@ uint16_t readADC_SingleEnded(uint8_t channel) {
       ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
       ADS1015_REG_CONFIG_CMODE_TRAD |   // Traditional comparator (default val)
       ADS1015_REG_CONFIG_DR_1600SPS |   // 1600 samples per second (default)
-      //ADS1015_REG_CONFIG_MODE_SINGLE;   // Single-shot mode (default)
-      ADS1015_REG_CONFIG_MODE_CONTIN;   // Set to continuous conversion
+      ADS1015_REG_CONFIG_MODE_SINGLE;   // Single-shot mode (default)
+      //ADS1015_REG_CONFIG_MODE_CONTIN;   // Set to continuous conversion
 
   // Set PGA/voltage range
   config |= CHOSEN_GAIN;
@@ -187,7 +188,7 @@ uint16_t readADC_SingleEnded(uint8_t channel) {
   ptr = sendbuffer; // Points to 0th element of the sendbuffer arr
   
   if(ads1115_write_reg(ADS1115_ADDRESS, ptr, (uint8_t)3) != ADS1115_SUCCESS){
-    return (uint16_t)0; // ERROR = -1, while uint16_t > 0. Now we can also see that something is wrong.
+    return (uint16_t)123; // ERROR = -1, while uint16_t > 0. Now we can also see that something is wrong.
   } 
   
   // Wait for the conversion to complete
@@ -196,6 +197,12 @@ uint16_t readADC_SingleEnded(uint8_t channel) {
   rtimer_clock_t t0;
   t0 = RTIMER_NOW();
   while(RTIMER_CLOCK_LT(RTIMER_NOW(), t0 + RTIMER_SECOND / 100));
+
+  // Add a timer to give the ADS some time to switch between channels:
+  // Test and maybe decrease the time
+  t0 = RTIMER_NOW();
+  while(RTIMER_CLOCK_LT(RTIMER_NOW(), t0 + RTIMER_SECOND / 10));
+
   //printf("ADS1115: rtimer done\n");
 
   // Read the conversion results
@@ -241,6 +248,7 @@ configure(int type, int value_arg)
     if(value_arg){
       i2c_init(I2C_SDA_PORT, I2C_SDA_PIN, I2C_SCL_PORT, I2C_SCL_PIN, I2C_SCL_NORMAL_BUS_SPEED);
       enabled = 1;
+      //i2c_master_enable(); // Is already called in i2c_init // Moved here from read_register
       //printf("ADS1115: configure function succeeded\n");
       return ADS1115_SUCCESS;
     }
